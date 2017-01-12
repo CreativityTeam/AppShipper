@@ -1,0 +1,34 @@
+<ion-view title="Signup" id="page8">
+  <ion-content padding="true" class="has-header">
+    <div class="spacer" style="height: 40px;"></div>
+    <div>
+      <img src="img/w6hRFeyaSwqZQuWt2MFX_2529241_icon.png" style="display: block; width: 100px; height: 100px; margin-left: auto; margin-right: auto;">
+    </div>
+    <div class="spacer" style="height: 40px;"></div>
+    <form id="signup-form4" class="list">
+      <ion-list id="signup-list4">
+        <label class="item item-input" id="signup-input3">
+          <span class="input-label">Email</span>
+          <input type="email" placeholder="" ng-model="newUser.email">
+        </label>
+        <label class="item item-input" id="signup-input4">
+          <span class="input-label">First Name</span>
+          <input type="text" placeholder="" ng-model="newUser.firstname">
+        </label>
+        <label class="item item-input" id="signup-input4">
+          <span class="input-label">Last Name</span>
+          <input type="text" placeholder="" ng-model="newUser.lastname">
+        </label>
+        <label class="item item-input" id="signup-input5">
+          <span class="input-label">Password</span>
+          <input type="password" placeholder="" ng-model="newUser.password">
+        </label>
+      </ion-list>
+      <label class="item item-input" id="signup-input6">
+        <span class="input-label">Re-Password</span>
+        <input type="password" placeholder="" ng-model="newUser.password2">
+      </label>
+      <button ng-click="register()" class="button button-assertive  button-block button-outline icon-left ion-android-create">Sign up</button>
+    </form>
+  </ion-content>
+</ion-view>
