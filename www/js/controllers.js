@@ -23,8 +23,32 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading) {
+.controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading,$cordovaOauth,$http) {
+    $scope.loginFace = function(){
+        $ionicLoading.show({
+                template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+        });
+        $cordovaOauth.facebook("1878320485734515", ["email", "public_profile"], {redirect_uri: "http://localhost/callback"}).then(function(result){
+            displayData($http, result.access_token);
+        },  function(error){
+            alert("Error: " + error);
+        });
 
+        function displayData($http, access_token)
+        {
+            $http.get("https://graph.facebook.com/v2.2/me", {params: {access_token: access_token, fields: "id,name,gender,email,picture", format: "json" }}).then(function(result) {
+                 $http.post(API_ENDPOINT.url + '/api/users/createFace', result.data).success(function(response){
+                        if(response.success){
+                            $ionicLoading.hide();
+                            AuthService.setToken(response.token);
+                            $state.go("tabsController.orderList");
+                        }
+                    });       
+            }, function(error) {
+                alert("Error: " + error);
+            });
+        }
+    };
     $scope.user = {
         username: '',
         password: ''
