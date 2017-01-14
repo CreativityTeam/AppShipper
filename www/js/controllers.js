@@ -1,14 +1,20 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope, $stateParams, BgTrackingService) {    
-    $scope.startTracking = function(){        
-        alert('Start tracking your location');
+.controller('orderListCtrl', function ($scope, $stateParams, $ionicLoading, BgTrackingService) {    
+    $scope.startTracking = function(){                
+        $ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });
         BgTrackingService.start();
+        LocationShippingData.getLocationShipping();
     }
 
     $scope.stopTracking = function(){
-        alert('Stop tracking your location');
+        $ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });
         BgTrackingService.stop();
+    }
+
+    $scope.getLocationShipping=function(){
+        $ionicLoading.show({ template: 'Start get location shipping', noBackdrop: true, duration: 2000 });
+        LocationShippingData.getLocationShipping();
     }
 })
    
@@ -25,7 +31,7 @@ angular.module('app.controllers', [])
     };
 })
       
-.controller('order1Ctrl', function ($scope, $stateParams) {    
+.controller('order1Ctrl', function ($scope, $stateParams) {        
 })
    
 .controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading,$cordovaOauth,$http) {
