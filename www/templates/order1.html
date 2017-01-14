@@ -1,25 +1,21 @@
-<ion-view title="Order #1" id="page5">
+<ion-view ng-attr-title="Order detail" id="page5">
   <ion-content padding="true" class="has-header">
     <div class="list card" id="order1-card21">
       <ion-item class="item-icon-left" id="order1-list-item8">
-        <i class="icon ion-cash"></i>Price : 20.000</ion-item>
+        <i class="icon ion-cash"></i>Price : {{Order.total_price}}</ion-item>
       <ion-item class="item-icon-left" id="order1-list-item9">
-        <i class="icon ion-location"></i>Location: Cao Thang, Quan 3</ion-item>
+        <i class="icon ion-location"></i>Location: {{Order.location_ordered.address}}</ion-item>
       <ion-item class="item-icon-left item-icon-right" id="order1-list-item10">
-        <i class="icon ion-ios-contact-outline"></i>Mobile : 098.996.299
+        <i class="icon ion-ios-contact-outline"></i>Mobile : {{Order.user_order.phone}}
         <i class="icon ion-android-call"></i>
       </ion-item>
       <div class=" item item-image">
-        <img src="img/WifhZlUuQLu14UlkxHO7_bg.png" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+        <div id="map" data-tap-disabled="true"></div>
       </div>
       <div class="item item-body" id="order1-list-item-container2">
         <ion-list id="order1-list1">
-          <ion-item id="order1-list-item15">Com chien
-            <br> Quantity : 10</ion-item>
-          <ion-item id="order1-list-item16">Com chien
-            <br> Quantity : 10</ion-item>
-          <ion-item id="order1-list-item17">Com chien
-            <br> Quantity : 10</ion-item>
+          <ion-item id="order1-list-item15" ng-repeat="foods in Order.foods">{{foods.food_id.food_name}}
+            <br> Quantity : {{foods.quantity}}</ion-item>
         </ion-list>
       </div>
     </div>
