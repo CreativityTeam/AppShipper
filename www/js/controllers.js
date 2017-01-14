@@ -70,7 +70,7 @@ angular.module('app.controllers', [])
     };
 })
       
-.controller('order1Ctrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading) {   
+.controller('order1Ctrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,NgMap,NavigatorGeolocation) {   
     var getInfor = function(){
         $http.get(API_ENDPOINT.url + '/api/orders/findOrder/' + $stateParams.idorder).success(function(response){
             $ionicLoading.show({
@@ -79,26 +79,12 @@ angular.module('app.controllers', [])
             if(response.success){
                 $ionicLoading.hide();
                 $scope.Order = response.data;
-                initMap($scope.Order.location_ordered.point)
+                $scope.lat = $scope.Order.location_ordered.point.latitude
+                $scope.lng = $scope.Order.location_ordered.point.longitude
             }    
          });      
     } 
     getInfor();
-    function initMap(location) {
-        var myDBLoc = {lat : location.latitude, lng : location.longitude}
-        var myLatLng = {lat: -25.363, lng: 131.044};
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: myLatLng
-        });
-
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'Hello World!'
-        });
-    }
 })
    
 .controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading,$cordovaOauth,$http) {

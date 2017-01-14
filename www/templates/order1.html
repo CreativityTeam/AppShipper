@@ -5,12 +5,12 @@
         <i class="icon ion-cash"></i>Price : {{Order.total_price}}</ion-item>
       <ion-item class="item-icon-left" id="order1-list-item9">
         <i class="icon ion-location"></i>Location: {{Order.location_ordered.address}}</ion-item>
-      <ion-item class="item-icon-left item-icon-right" id="order1-list-item10">
-        <i class="icon ion-ios-contact-outline"></i>Mobile : {{Order.user_order.phone}}
-        <i class="icon ion-android-call"></i>
+      <ion-item class="item-icon-left" id="order1-list-item10">
+        <i class="icon ion-ios-contact-outline"></i>User Order : {{Order.user_order.local.name}}, <a ng-href="tel :{{Order.user_order.phone}}">,{{Order.user_order.phone}}</a>
       </ion-item>
-      <div class=" item item-image">
-        <div id="map" data-tap-disabled="true"></div>
+      <div class=" item item-image" ng-hide="isHavePoint">
+        <ng-map zoom="16" center="[{{lat}}, {{lng}}]">
+          <marker position="[{{lat}}, {{lng}}]" title="hello"></marker>
       </div>
       <div class="item item-body" id="order1-list-item-container2">
         <ion-list id="order1-list1">
