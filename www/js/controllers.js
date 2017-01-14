@@ -1,8 +1,15 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope, $stateParams) {
+.controller('orderListCtrl', function ($scope, $stateParams, BgTrackingService) {    
+    $scope.startTracking = function(){        
+        alert('Start tracking your location');
+        BgTrackingService.start();
+    }
 
-
+    $scope.stopTracking = function(){
+        alert('Stop tracking your location');
+        BgTrackingService.stop();
+    }
 })
    
 .controller('orderHistoryCtrl', function ($scope, $stateParams) {
@@ -18,9 +25,7 @@ angular.module('app.controllers', [])
     };
 })
       
-.controller('order1Ctrl', function ($scope, $stateParams) {
-
-
+.controller('order1Ctrl', function ($scope, $stateParams) {    
 })
    
 .controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading) {
