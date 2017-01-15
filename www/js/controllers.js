@@ -2,18 +2,23 @@ angular.module('app.controllers', [])
   
 .controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService, $interval) {
     var getListOrder = function(){
-        // $interval(function(){
-        //     console.log('Updating...');
+        $interval(function(){
+            console.log('Updating...');
             $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
-            $ionicLoading.show({
-                template: '<p>Loading...</p><ion-spinner></ion-spinner>',
-            });
-            if(response.success){
-                $ionicLoading.hide();
-                $scope.listOrder = response.data;
-            }    
+                $ionicLoading.show({
+                    template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+                });
+                if(response.success){
+                    $ionicLoading.hide();
+                    $scope.listOrder = response.data.filter(function(elem){
+                        if (!elem.shipper){
+                            return true;
+                        }
+                        return false; 
+                    });
+                }    
          });
-        // },1000);              
+        },100);              
     }   
 
     getListOrder();
