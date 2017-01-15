@@ -1,8 +1,5 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope, $stateParams, $ionicLoading, BgTrackingService) {    
-    $scope.startTracking = function(){                
-        $ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });
 .controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService) {
     var getListOrder = function(){
         $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
@@ -19,8 +16,8 @@ angular.module('app.controllers', [])
     getListOrder();
 
     $scope.startTracking = function(){        
-        BgTrackingService.start();
-        LocationShippingData.getLocationShipping();
+        $ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });
+        BgTrackingService.start();        
     }
 
     $scope.stopTracking = function(){
@@ -77,8 +74,7 @@ angular.module('app.controllers', [])
          });      
     };
 })
-      
-.controller('order1Ctrl', function ($scope, $stateParams) {        
+             
 .controller('order1Ctrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,NgMap,NavigatorGeolocation) {   
     var getInfor = function(){
         $http.get(API_ENDPOINT.url + '/api/orders/findOrder/' + $stateParams.idorder).success(function(response){
