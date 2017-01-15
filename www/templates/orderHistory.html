@@ -7,16 +7,16 @@
       </label>
       <ion-item class="item-thumbnail-left assertive" id="orderList-list-item1" ng-repeat="order in listOrder">
         <img src="img/92rQSuhPSQOSj6zRYF2K_unnamed.png">
-        <h2assertive>Order #{{order._id}}
-          <p style="white-space:normal;">Price: {{order.total_price}}
-            <br>Fee Shipping: {{order.feeshipping}}
-            <br>Pay Status: {{order.paymentstatus}}
-            <br>Shipping Status: {{order.shippingstatus}}
-            <br>Location: {{order.location_ordered.address}},
+        <h2assertive>Commande #{{order._id}}
+          <p style="white-space:normal;">Prix: {{order.total_price}}
+            <br>Livraison: {{order.feeshipping}}
+            <br>État de la paye: {{order.paymentstatus}}
+            <br>État de la livraison: {{order.shippingstatus}}
+            <br>Emplacement: {{order.location_ordered.address}},
             <br>
             <br>
-            <a class="button button-small button-assertive" ui-sref="tabsController.order1({idorder : order._id})">Detail</a>
-            <button ng-click="print(order._id)" class="button button-small button-assertive">Print</button>
+            <a class="button button-small button-assertive" ui-sref="tabsController.order1({idorder : order._id})">Détail</a>
+            <button class="button button-small button-assertive">Impression</button>
           </p>
         </h2assertive>
       </ion-item>

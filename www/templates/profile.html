@@ -10,38 +10,38 @@
         <input type="email" ng-readonly="isEdit" ng-model="user.local.email" ng-value="user.local.email">
       </label>
       <label class="item item-input">
-        <i class="icon ion-ios-location"></i><span class="input-label">Address</span>
+        <i class="icon ion-ios-location"></i><span class="input-label">Adresse</span>
         <input type="text" ng-readonly="isEdit" ng-model="user.address" ng-value="user.address">
       </label>
       <label class="item item-input">
-        <i class="icon ion-transgender"></i><span class="input-label">Gender</span>  
+        <i class="icon ion-transgender"></i><span class="input-label">Le genre</span>  
         <input type="text" ng-readonly="isEdit" ng-model="user.gender" ng-value="user.gender">
       </label>
       <label class="item item-input">
-        <i class="icon ion-calendar"></i><span class="input-label">BOD</span>  
+        <i class="icon ion-calendar"></i><span class="input-label">Anniversaire</span>  
         <input type="text" ng-readonly="isEdit" ng-model="user.birthday" ng-value="user.birthday">
       </label>
       <label class="item item-input">
-        <i class="icon ion-iphone"></i><span class="input-label">Phone</span>  
+        <i class="icon ion-iphone"></i><span class="input-label">Téléphone</span>  
         <input type="number" ng-readonly="isEdit" ng-model="user.phone" ng-value="user.phone">
       </label>
       <div class="row">
         <div class="col">
-            <button ui-sref="tabsController.orderHistory({idshipper : user._id})" class="button button-assertive  button-block button-outline icon-left ion-android-restaurant">Order : {{countOrder}}</button>
+            <button ui-sref="tabsController.orderHistory({idshipper : user._id})" class="button button-assertive  button-block button-outline icon-left ion-android-restaurant">Commande : {{countOrder}}</button>
         </div>
         <div class="col" ng-show="isEdit">
-            <button ng-click="enableEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Edit </button>
+            <button ng-click="enableEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Modifier </button>
         </div>
         <div class="col">
-            <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-log-in">Log out</button>
+            <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-log-in">Se déconnecter</button>
         </div>
       </div>
       <div class="row" ng-hide="isEdit">
         <div class="col">
-          <button ng-click="updateUser(user._id)" class="button button-assertive  button-block button-outline icon-left ion-settings">Save</button>
+          <button ng-click="updateUser(user._id)" class="button button-assertive  button-block button-outline icon-left ion-settings">Sauvegarder</button>
         </div>
         <div class="col">
-          <button ng-click="cancelEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Cancel</button>
+          <button ng-click="cancelEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Annuler</button>
         </div>
       </div>
     </ion-list>
