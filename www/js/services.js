@@ -1,7 +1,7 @@
 angular.module('app.services', ['ionic'])
 
 .constant('API_ENDPOINT',{
-    url: 'https://test3721.herokuapp.com/server'
+    url: 'http://localhost:3000/server'
 })
 
 .service('AuthService',function($q, $http,API_ENDPOINT){

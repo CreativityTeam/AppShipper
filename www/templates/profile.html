@@ -2,18 +2,48 @@
   <ion-content padding="true" class="has-header">
     <ion-list id="profile-list2">
       <ion-item class="item-avatar" id="profile-list-item18">
-        <img src="img/VHo836keTxaR2CK7dp6t_2529241_icon.png">
-        <h2>Nhat Nguyen</h2>
+        <img ng-src="http://localhost:3000/{{user.avatar}}">
+        <h2>{{user.local.name}}</h2>
       </ion-item>
-      <ion-item class="item-icon-left" id="profile-list-item19">
-        <i class="icon ion-ios-home"></i>Home : Luong Dinh Cua, Quan 2</ion-item>
-      <ion-item class="item-icon-left" id="profile-list-item21">
-        <i class="icon ion-transgender"></i>Gender : Male</ion-item>
-      <ion-item class="item-icon-left" id="profile-list-item20">
-        <i class="icon ion-android-call"></i>Phone : 0989.960.299</ion-item>
-      <ion-item class="item-icon-left" id="profile-list-item22" ui-sref="tabsController.orderHistory">
-        <i class="icon ion-android-restaurant"></i>My Order : 30</ion-item>
-      <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-log-in">Log out</button>
+      <label class="item item-input">
+        <i class="icon ion-email"></i><span class="input-label">Email</span> 
+        <input type="email" ng-readonly="isEdit" ng-model="user.local.email" ng-value="user.local.email">
+      </label>
+      <label class="item item-input">
+        <i class="icon ion-ios-location"></i><span class="input-label">Address</span>
+        <input type="text" ng-readonly="isEdit" ng-model="user.address" ng-value="user.address">
+      </label>
+      <label class="item item-input">
+        <i class="icon ion-transgender"></i><span class="input-label">Gender</span>  
+        <input type="text" ng-readonly="isEdit" ng-model="user.gender" ng-value="user.gender">
+      </label>
+      <label class="item item-input">
+        <i class="icon ion-calendar"></i><span class="input-label">BOD</span>  
+        <input type="text" ng-readonly="isEdit" ng-model="user.birthday" ng-value="user.birthday">
+      </label>
+      <label class="item item-input">
+        <i class="icon ion-iphone"></i><span class="input-label">Phone</span>  
+        <input type="number" ng-readonly="isEdit" ng-model="user.phone" ng-value="user.phone">
+      </label>
+      <div class="row">
+        <div class="col">
+            <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-android-restaurant">Order : 30</button>
+        </div>
+        <div class="col" ng-show="isEdit">
+            <button ng-click="enableEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Edit </button>
+        </div>
+        <div class="col">
+            <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-log-in">Log out</button>
+        </div>
+      </div>
+      <div class="row" ng-hide="isEdit">
+        <div class="col">
+          <button ng-click="updateUser(user._id)" class="button button-assertive  button-block button-outline icon-left ion-settings">Save</button>
+        </div>
+        <div class="col">
+          <button ng-click="cancelEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Cancel</button>
+        </div>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>

@@ -60,7 +60,7 @@ angular.module('app.routes', ['ionicUIRouter'])
       /page1/tab2/orderdetail
   */
   .state('tabsController.order1', {
-    url: '/orderdetail',
+    url: '/orderdetail/:idorder',
     views: {
       'tab1': {
         templateUrl: 'templates/order1.html',

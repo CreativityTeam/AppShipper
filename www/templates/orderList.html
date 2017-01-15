@@ -5,18 +5,19 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input type="search" placeholder="">
       </label>
-      <ion-item class="item-thumbnail-left assertive" id="orderList-list-item1">
+      <ion-item class="item-thumbnail-left assertive" id="orderList-list-item1" ng-repeat="order in listOrder">
         <img src="img/92rQSuhPSQOSj6zRYF2K_unnamed.png">
-        <h2assertive  ui-sref="tabsController.order1">Order #1
-          <p style="white-space:normal;">Price: 20.000
-            <br>Fee Shipping: 20.000
-            <br>Pay Status: No
-            <br>Shipping Status: Shipping
-            <br>Location: 111 Cao thang, Quan 3,
+        <h2assertive>Order #{{order._id}}
+          <p style="white-space:normal;">Price: {{order.total_price}}
+            <br>Fee Shipping: {{order.feeshipping}}
+            <br>Pay Status: {{order.paymentstatus}}
+            <br>Shipping Status: {{order.shippingstatus}}
+            <br>Location: {{order.location_ordered.address}},
             <br>
             <br>
+            <a class="button button-small button-assertive" ui-sref="tabsController.order1({idorder : order._id})">Detail</a>
             <button class="button button-small button-assertive" ng-click="stopTracking()">Shipped</button>
-            <button class="button button-small button-positive" ng-click="startTracking()">Shipping</button>
+            <button class="button button-small button-assertive" ng-click="startTracking()">Shipping</button>
           </p>
         </h2assertive>
       </ion-item>
