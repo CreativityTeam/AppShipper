@@ -27,7 +27,7 @@
       </label>
       <div class="row">
         <div class="col">
-            <button ng-click="logout()" class="button button-assertive  button-block button-outline icon-left ion-android-restaurant">Order : 30</button>
+            <button ui-sref="tabsController.orderHistory({idshipper : user._id})" class="button button-assertive  button-block button-outline icon-left ion-android-restaurant">Order : {{countOrder}}</button>
         </div>
         <div class="col" ng-show="isEdit">
             <button ng-click="enableEdit()" class="button button-assertive  button-block button-outline icon-left ion-settings">Edit </button>

@@ -31,9 +31,52 @@ angular.module('app.controllers', [])
     }
 })
    
-.controller('orderHistoryCtrl', function ($scope, $stateParams) {
+.controller('orderHistoryCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,$cordovaPrinter) {
+    var getListOrder = function(){
+        $http.get(API_ENDPOINT.url + '/api/orders/findinfobyshipper/' + $stateParams.idshipper).success(function(response){
+            $ionicLoading.show({
+                template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+            });
+            if(response.success){
+                $ionicLoading.hide();
+                $scope.listOrder = response.data;
+            }    
+         });      
+    } 
 
-
+    $scope.print = function(idOrder) {
+         if($cordovaPrinter.isAvailable()) {
+                    $cordovaPrinter.print("http://www.nraboy.com");
+                } else {
+                    alert("Printing is not available on device");
+                }
+         /*$http.get(API_ENDPOINT.url + '/api/orders/findOrder/' + idOrder).success(function(response){
+            $ionicLoading.show({
+                template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+            });
+            if(response.success){
+                $ionicLoading.hide();
+                $scope.Order = response.data;
+                var html ="<h1><strong>ORDER" + $scope.Order._id +"</strong></h1>"; 
+                html += "<p><strong>Time Order:" + $scope.Order.time_ordered + "</strong></p>";
+                html += "<h2><strong>To</strong></h2>"
+                html += "<p><strong>" + $scope.Order.location_ordered.address + "</strong></p>";
+                html += "<p><strong>&nbsp;</strong></p>";
+                html += "<table style='background-color: #ffa77a; height: 146px;' border='1px' width='449'>"  
+                html += "<tbody><tr><td><h3><span style='color: #ffffff;'><strong>Name</strong></span></h3></td><td><h3><span style='color: #ffffff;'><strong>Quantity</strong></span></h3></td><td>"
+                html += "<h3><span style='color: #ffffff;'><strong>Price Per Unit</strong></span></h3></td></tr><tr><td>"
+                for(food in $scope.Order.foods){
+                    html += "<h3>" + $scope.Order.foods[food].food_id.food_name + "</h3>"
+                    html += "</td><td><h3>" + $scope.Order.foods[food].quantity + "</h3></td><td><h3> " + $scope.Order.foods[food].food_id.price + "</h3></td></tr>"
+                }
+                html += "<td colspan='2'><h3>&nbsp;</h3><h3>SUBTOTAL</h3></td><td><h3>" + ($scope.Order.total_price - $scope.Order.feeshipping)  + "</h3></td></tr>"
+                html += "<tr><td colspan='2'><h3>SHIPPING</h3></td><td><h3>" + $scope.Order.feeshipping + "</h3></td></tr>"
+                html += "<tr><td colspan='2'><h3>TOTAL</h3></td><td><h3>" + $scope.Order.total_price + "</h3></td></tr></tbody></table>"*
+               
+            }
+        });*/      
+    }
+    getListOrder();
 })
    
 .controller('profileCtrl',function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading) {
@@ -44,6 +87,11 @@ angular.module('app.controllers', [])
                 $http.get(API_ENDPOINT.url + '/api/users/findone/' + AuthService.tokensave()).success(function(response){
                 if(response.success){
                     $scope.user = response.data;
+                    $http.get(API_ENDPOINT.url + '/api/orders/findinfobyshipper/' + $scope.user._id).success(function(response){
+                        if(response.success){
+                            $scope.countOrder = response.data.length;
+                        }
+                    });   
                 }
             });
         }
@@ -92,7 +140,7 @@ angular.module('app.controllers', [])
     getInfor();
 })
    
-.controller('loginCtrl',function ($scope, $stateParams,$state, AuthService,$ionicPopup,$ionicLoading,$cordovaOauth,$http) {
+.controller('loginCtrl',function ($scope, $stateParams,$state,API_ENDPOINT, AuthService,$ionicPopup,$ionicLoading,$cordovaOauth,$http) {
     $scope.loginFace = function(){
         $ionicLoading.show({
                 template: '<p>Loading...</p><ion-spinner></ion-spinner>',

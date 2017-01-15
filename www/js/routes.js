@@ -21,7 +21,7 @@ angular.module('app.routes', ['ionicUIRouter'])
   })
 
   .state('tabsController.orderHistory', {
-    url: '/ordierhist',
+    url: '/ordierhist/:idshipper',
     views: {
       'tab2': {
         templateUrl: 'templates/orderHistory.html',
