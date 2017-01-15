@@ -2,7 +2,7 @@ angular.module('app.controllers', [])
   
 .controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService, $interval) {
     var getListOrder = function(){
-        $interval(function(){
+        /*$interval(function(){*/
             console.log('Updating...');
             $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
                 $ionicLoading.show({
@@ -18,7 +18,7 @@ angular.module('app.controllers', [])
                     });
                 }    
          });
-        },100);              
+        /*},100);*/              
     }   
 
     getListOrder();
