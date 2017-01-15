@@ -1,7 +1,7 @@
 angular.module('app.services', ['ionic'])
 
 .constant('API_ENDPOINT',{
-    url: 'http://192.168.19.1:3000/server'
+    url: 'http://192.168.0.104:3000/server'
 })
 
 .service('AuthService',function($q, $http,API_ENDPOINT){
@@ -74,8 +74,28 @@ angular.module('app.services', ['ionic'])
   };
 })
 
-.service('BgTrackingService',function($http, $ionicPlatform, $ionicLoading){
-    this.start = function(){        
+.service('ShippingStatusService',function($http,API_ENDPOINT){
+    this.shipping = function(orderId){
+        var requestBody = {'status': 'shipping'};
+        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus/' + orderId, requestBody).then(function(response){                        
+            // $ionicLoading.show({ template: 'Send location data to server successfully!', noBackdrop: true, duration: 2000 });                        
+        }, function(error){                        
+            // $ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+        });
+    }
+
+    this.shipped = function(orderId){
+        var requestBody = {'status': 'shipped'};
+        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus/' + orderId, requestBody).then(function(response){                        
+            //$ionicLoading.show({ template: 'Send location data to server successfully!', noBackdrop: true, duration: 2000 });                        
+        }, function(error){                        
+            //$ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+        });
+    }
+})
+
+.service('BgTrackingService',function($http, $ionicPlatform, $ionicLoading, API_ENDPOINT){
+    this.start = function(orderId){        
         var currentPlatform = ionic.Platform.platform();
         var currentPlatformVersion = ionic.Platform.version();        
         backgroundGeolocation.watchLocationMode(
@@ -84,11 +104,11 @@ angular.module('app.services', ['ionic'])
                 // location service are now enabled 
                 // call backgroundGeolocation.start 
                 // only if user already has expressed intent to start service 
-                    alert('Location is now enabled');
+                    alert('Location is now enabled. Tracking is ready!');
                 } else {
                 // location service are now disabled or we don't have permission 
                 // time to change UI to reflect that 
-                    alert('Location is now disabled');
+                    alert('Tracking not work because location is now disabled. Please go to Settings to turn it on!');
                 }
             },
             function (error) {
@@ -101,11 +121,11 @@ angular.module('app.services', ['ionic'])
                 var locationTestUrl = 'https://lit-plains-83504.herokuapp.com/locations';
                 //This is temporarily for testing
                 // var locationUrl = 'https://lit-plains-83504.herokuapp.com/testlocations';
-                //Real
-                var locationUrl = 'http://192.168.0.102:3000/server/api/orders/updateshiplocation/586e28470600b0151cb655c7';                  
+                //Real                
+                var locationUrl = API_ENDPOINT.url + '/api/orders/updateshiplocation/' + orderId;                              
                 var backgroundGeolocation = window.backgroundGeolocation || window.backgroundGeoLocation || window.universalGeolocation;
                 var callbackFn = function(location) {                                
-                    $ionicLoading.show({ template: 'Your current location:  ' + location.latitude + ',' + location.longitude, noBackdrop: true, duration: 2000 });                        
+                    $ionicLoading.show({ template: 'Your current location:  ' + location.latitude + ',' + location.longitude, noBackdrop: true, duration: 1000 });                        
 
                     // //For testing
                     // var requestBody = {'location_shipping': {"time": location.time, "latitude": location.latitude, "longitude": location.longitude}};            
@@ -151,9 +171,9 @@ angular.module('app.services', ['ionic'])
 
                 // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app. 
                 backgroundGeolocation.start(function(){                    
-                    $ionicLoading.show({ template: 'Service start successfully', noBackdrop: true, duration: 2000 });
+                    $ionicLoading.show({ template: 'Service start successfully', noBackdrop: true, duration: 1000 });
                 }, function(error){
-                    $ionicLoading.show({ template: 'Service start failed ' + error, noBackdrop: true, duration: 2000 });
+                    $ionicLoading.show({ template: 'Service start failed ' + error, noBackdrop: true, duration: 1000 });
                 });
             }
             else{
@@ -163,22 +183,8 @@ angular.module('app.services', ['ionic'])
         });        
     }
 
-    this.stop = function(){
+    this.stop = function(orderId){
         // If you wish to turn OFF background-tracking, call the #stop method. 
         backgroundGeolocation.stop(); 
-    }
-})
-
-.service('LocationShippingData', function($timeout, $http, $ionicLoading){
-    var getLocationUrl = 'http://192.168.0.102:3000/server/api/orders/getlocationshipping/586e28470600b0151cb655c7';
-    this.getLocationShipping = function(){
-        $ionicLoading.show({ template: 'Getting location...', noBackdrop: true, duration: 1000 });                        
-        $timeout(function(){
-            $http.get(getLocationUrl).then(function(response){                        
-                $ionicLoading.show({ template: 'Current location: ' + response.data.point.latitude + ' ' + response.data.point.longitude, noBackdrop: true, duration: 1000 });                        
-            }, function(error){                        
-                $ionicLoading.show({ template: 'Error ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 1000 });
-            });
-        },2000);
     }
 })

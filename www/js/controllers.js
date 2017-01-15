@@ -1,8 +1,10 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService) {
+.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService, $interval) {
     var getListOrder = function(){
-        $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
+        // $interval(function(){
+        //     console.log('Updating...');
+            $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
             $ionicLoading.show({
                 template: '<p>Loading...</p><ion-spinner></ion-spinner>',
             });
@@ -10,38 +12,41 @@ angular.module('app.controllers', [])
                 $ionicLoading.hide();
                 $scope.listOrder = response.data;
             }    
-         });      
+         });
+        // },1000);              
     }   
 
     getListOrder();
 
-    $scope.startTracking = function(){        
+    $scope.startTracking = function(order){        
         $ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });
-        BgTrackingService.start();        
+        BgTrackingService.start(order._id);
+        ShippingStatusService.shipping(order._id);        
+        order.shippingstatus = 'shipping';
     }
 
-    $scope.stopTracking = function(){
+    $scope.stopTracking = function(order){
         $ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });
-        BgTrackingService.stop();
-    }
-
-    $scope.getLocationShipping=function(){
-        $ionicLoading.show({ template: 'Start get location shipping', noBackdrop: true, duration: 2000 });
-        LocationShippingData.getLocationShipping();
+        BgTrackingService.stop(order._id);
+        ShippingStatusService.shipped(order._id);
+        order.shippingstatus = 'shipped';
     }
 })
    
-.controller('orderHistoryCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,$cordovaPrinter) {
-    var getListOrder = function(){
-        $http.get(API_ENDPOINT.url + '/api/orders/findinfobyshipper/' + $stateParams.idshipper).success(function(response){
-            $ionicLoading.show({
-                template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+.controller('orderHistoryCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,$cordovaPrinter,$interval) {
+    var getListOrder = function($interval){
+        // $interval(function(){
+            console.log('Updating...');
+            $http.get(API_ENDPOINT.url + '/api/orders/findinfobyshipper/' + $stateParams.idshipper).success(function(response){
+                $ionicLoading.show({
+                    template: '<p>Loading...</p><ion-spinner></ion-spinner>',
+                });
+                if(response.success){
+                    $ionicLoading.hide();
+                    $scope.listOrder = response.data;
+                }    
             });
-            if(response.success){
-                $ionicLoading.hide();
-                $scope.listOrder = response.data;
-            }    
-         });      
+        // },1000)              
     } 
 
     $scope.print = function(idOrder) {
