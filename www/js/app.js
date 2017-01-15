@@ -10,7 +10,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 .config(function($ionicConfigProvider, $sceDelegateProvider){
   
   $ionicConfigProvider.backButton.text('').previousTitleText(false);
-  
+  $ionicConfigProvider.views.maxCache(0);
   $ionicConfigProvider.tabs.position('bottom');
   $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
 

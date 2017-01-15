@@ -1,7 +1,7 @@
 angular.module('app.services', ['ionic'])
 
 .constant('API_ENDPOINT',{
-    url: 'http://localhost:3000/server'
+    url: 'http://192.168.19.1:3000/server'
 })
 
 .service('AuthService',function($q, $http,API_ENDPOINT){
