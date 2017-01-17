@@ -17,7 +17,7 @@
             <br>
             <a class="button button-small button-assertive" ui-sref="tabsController.order1({idorder : order._id})">Détail</a>
             <button class="button button-small button-assertive" ng-click="stopTracking(order)">Expédié</button>
-            <button class="button button-small button-assertive" ng-click="startTracking(order)">Livraison</button>
+            <button class="button button-small button-assertive" ng-click="startTracking(order)" ng-disabled="isShipping">Livraison</button>
           </p>
         </h2assertive>
       </ion-item>

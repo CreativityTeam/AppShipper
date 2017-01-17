@@ -1,13 +1,12 @@
 angular.module('app.controllers', [])
   
 .controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService, $interval) {
+    $scope.isShipping = false;
     var getListOrder = function(){
-        /*$interval(function(){*/
-            console.log('Updating...');
-            $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
-                $ionicLoading.show({
+            $ionicLoading.show({
                     template: '<p>Loading...</p><ion-spinner></ion-spinner>',
-                });
+            });
+            $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
                 if(response.success){
                     $ionicLoading.hide();
                     $scope.listOrder = response.data.filter(function(elem){
@@ -17,24 +16,36 @@ angular.module('app.controllers', [])
                         return false; 
                     });
                 }    
-         });
-        /*},100);*/              
+         });            
     }   
 
     getListOrder();
 
     $scope.startTracking = function(order){        
-        $ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });
+        /*$ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });*/
+        $scope.isShipping = true;
         BgTrackingService.start(order._id);
-        ShippingStatusService.shipping(order._id);        
-        order.shippingstatus = 'shipping';
+        var requestBody = {'status': 'shipping'};
+        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus/' + order._id, requestBody).then(function(response){                        
+            getListOrder();                        
+        }, function(error){                        
+            // $ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+        });
+        /*ShippingStatusService.shipping(order._id);        
+        order.shippingstatus = 'shipping';*/
     }
 
     $scope.stopTracking = function(order){
-        $ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });
+        /*$ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });*/
         BgTrackingService.stop(order._id);
-        ShippingStatusService.shipped(order._id);
-        order.shippingstatus = 'shipped';
+        var requestBody = {'status': 'shipped'};
+        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus/' + order._id, requestBody).then(function(response){                        
+            getListOrder();                       
+        }, function(error){                        
+            //$ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+        });
+        /*ShippingStatusService.shipped(order._id);
+        order.shippingstatus = 'shipped';*/
     }
 })
    
