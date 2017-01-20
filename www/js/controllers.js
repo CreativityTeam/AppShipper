@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService, $interval) {
+.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService) {
     $scope.isShipping = false;
     var getListOrder = function(){
         $ionicLoading.show({
@@ -20,7 +20,7 @@ angular.module('app.controllers', [])
     }   
 
     var ioConnect = function(){        
-        var ioServerUrl = 'http://192.168.0.103:3000'; 
+        var ioServerUrl = API_ENDPOINT.root; 
         console.log(ioServerUrl);               
                     
         $scope.ioConnection = io.connect(ioServerUrl);                      
