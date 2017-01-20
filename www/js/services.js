@@ -122,7 +122,8 @@ angular.module('app.services', ['ionic'])
                 //This is temporarily for testing
                 // var locationUrl = 'https://lit-plains-83504.herokuapp.com/testlocations';
                 //Real                
-                var locationUrl = API_ENDPOINT.url + '/api/orders/updateshiplocation/' + orderId;                              
+                // var locationUrl = API_ENDPOINT.url + '/api/orders/updateshiplocation/' + orderId;
+                var locationUrl = API_ENDPOINT.url + '/api/orders/updateshiplocation';                              
                 var backgroundGeolocation = window.backgroundGeolocation || window.backgroundGeoLocation || window.universalGeolocation;
                 var callbackFn = function(location) {                                
                     $ionicLoading.show({ template: 'Your current location:  ' + location.latitude + ',' + location.longitude, noBackdrop: true, duration: 1000 });                        
@@ -131,7 +132,7 @@ angular.module('app.services', ['ionic'])
                     // var requestBody = {'location_shipping': {"time": location.time, "latitude": location.latitude, "longitude": location.longitude}};            
 
                     //Real
-                    var requestBody = {"time": location.time, "latitude": location.latitude, "longitude": location.longitude};            
+                    var requestBody = {"time": location.time, "latitude": location.latitude, "longitude": location.longitude, "id": orderId};            
 
                     // Do your HTTP request here to POST location to your server. 
                     $http.put(locationUrl, requestBody).then(function(response){                        
