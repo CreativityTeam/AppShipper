@@ -42,7 +42,7 @@ angular.module('app.controllers', [])
         $scope.orderInTracking = order._id;
         $scope.isShipping = true;
         BgTrackingService.start(order._id);
-        var requestBody = {'id': order._id, 'status': 'shipping'};
+        var requestBody = {'id': order._id, 'status': 'shipping', 'shipperId' : AuthService.userInforIdSave()};
         $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
             console.log('Send status to server done');                        
         }, function(error){ 
@@ -56,7 +56,7 @@ angular.module('app.controllers', [])
         $scope.isShipping = false;
         $scope.orderInTracking = null;
         BgTrackingService.stop(order._id);
-        var requestBody = {'id': order._id, 'status': 'shipped'};
+        var requestBody = {'id': order._id, 'status': 'shipped','shipperId' : AuthService.userInforIdSave()};
         $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
             console.log('Send status to server done');                       
         }, function(error){          

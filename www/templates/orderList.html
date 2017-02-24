@@ -5,7 +5,7 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input type="search" placeholder="" ng-model="orderSearchCretia">
       </label>
-      <ion-item class="item-thumbnail-left assertive" id="orderList-list-item1" ng-repeat="order in listOrder | filter : orderSearchCretia">
+      <ion-item class="item-thumbnail-left assertive" id="orderList-list-item1" ng-repeat="order in listOrder | filter : orderSearchCretia" ng-if="order.shippingstatus != 'shipping'">
         <img src="img/92rQSuhPSQOSj6zRYF2K_unnamed.png">
         <h2assertive>Commande #{{order._id}}
           <p style="white-space:normal;">Prix: {{order.total_price}}
