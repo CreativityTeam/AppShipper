@@ -56,7 +56,7 @@ angular.module('app.controllers', [])
         $scope.isShipping = false;
         $scope.orderInTracking = null;
         BgTrackingService.stop(order._id);
-        var requestBody = {'id': order._id, 'status': 'shipped','shipperId' : AuthService.userInforIdSave()};
+        var requestBody = {'id': order._id, 'status': 'shipped'};
         $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
             console.log('Send status to server done');                       
         }, function(error){          
