@@ -1,7 +1,6 @@
 angular.module('app.controllers', [])
   
-.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService) {
-    $scope.isShipping = false;
+.controller('orderListCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading, BgTrackingService, ShippingStatusService) {        
     var getListOrder = function(){
         $ionicLoading.show({
             template: '<p>Loading...</p><ion-spinner></ion-spinner>',
@@ -9,26 +8,21 @@ angular.module('app.controllers', [])
         $http.get(API_ENDPOINT.url + '/api/orders/findAllOrder/').success(function(response){
             if(response.success){
                 $ionicLoading.hide();
-                $scope.listOrder = response.data.filter(function(elem){
-                    if (!elem.shipper){
-                        return true;
-                    }
-                    return false; 
-                });
+                $scope.listOrder = response.data;             
             }    
          });            
     }   
 
     var ioConnect = function(){        
         var ioServerUrl = API_ENDPOINT.root; 
-        console.log(ioServerUrl);               
                     
         $scope.ioConnection = io.connect(ioServerUrl);                      
-        $scope.ioConnection.on('status', function(data){            
-            $ionicLoading.show({ template: 'New status update ' + data.order_id + ': ' + data.status, noBackdrop: true, duration: 2000 });
+        $scope.ioConnection.on('status', function(data){                  
+            $ionicLoading.show({ template: 'New status update: ' + data.order_id + '=' + data.status + ' by shipper ' + data.shipperId, noBackdrop: true, duration: 2000 });
             $scope.listOrder.forEach(function(elem){                
                 if (elem._id == data.order_id){                    
                     elem.shippingstatus = data.status;
+                    elem.shipper = data.shipperId;
                 }
             })
         });                    
@@ -37,26 +31,30 @@ angular.module('app.controllers', [])
     getListOrder();
     ioConnect();
 
-    $scope.startTracking = function(order){        
-        /*$ionicLoading.show({ template: 'Start tracking your location', noBackdrop: true, duration: 2000 });*/        
-        $scope.orderInTracking = order._id;
-        $scope.isShipping = true;
-        BgTrackingService.start(order._id);
-        var requestBody = {'id': order._id, 'status': 'shipping', 'shipperId' : AuthService.userInforIdSave()};
-        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
-            console.log('Send status to server done');                        
-        }, function(error){ 
-            console.log('Send status to server failed');                       
-            // $ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
-        });                
+    $scope.startTracking = function(order){    
+        $http.get(API_ENDPOINT.url + '/api/users/isshipping/' + AuthService.userInforIdSave()).success(function(response){
+            if(response.success){                
+                if (response.data == 'Yes'){
+                    $ionicLoading.show({ template: 'Only tracking 1 order at a time. Please check your orders!', noBackdrop: true, duration: 2000 });
+                };
+                if (response.data == 'No'){
+                    BgTrackingService.start(order._id);
+                    var requestBody = {'id': order._id, 'status': 'shipping', 'shipperId' : AuthService.userInforIdSave()};        
+                    $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
+                        console.log('Send status to server done');                        
+                    }, function(error){ 
+                        console.log('Send status to server failed');                       
+                        // $ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+                    });                
+                };             
+            }    
+        });                                 
     }
 
     $scope.stopTracking = function(order){
-        /*$ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });*/
-        $scope.isShipping = false;
-        $scope.orderInTracking = null;
+        /*$ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });*/                        
         BgTrackingService.stop(order._id);
-        var requestBody = {'id': order._id, 'status': 'shipped'};
+        var requestBody = {'id': order._id, 'status': 'shipped', 'shipperId': AuthService.userInforIdSave()};
         $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
             console.log('Send status to server done');                       
         }, function(error){          
@@ -71,7 +69,7 @@ angular.module('app.controllers', [])
     })
 })
    
-.controller('orderHistoryCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,$cordovaPrinter,$interval) {
+.controller('orderHistoryCtrl', function ($scope,$http, $stateParams, $state, API_ENDPOINT, AuthService,$ionicLoading,$cordovaPrinter,$interval,BgTrackingService) {
     var getListOrder = function($interval){
         // $interval(function(){
             console.log('Updating...');
@@ -119,6 +117,20 @@ angular.module('app.controllers', [])
             }
         });*/      
     }
+
+    $scope.stopTracking = function(order){
+        /*$ionicLoading.show({ template: 'Stop tracking your location', noBackdrop: true, duration: 2000 });*/                
+        order.shippingstatus = 'shipped';
+        BgTrackingService.stop(order._id);
+        var requestBody = {'id': order._id, 'status': 'shipped', 'shipperId': AuthService.userInforIdSave()};
+        $http.put(API_ENDPOINT.url + '/api/orders/updatestatus', requestBody).then(function(response){                        
+            console.log('Send status to server done');                       
+        }, function(error){          
+            console.log('Send status to server failed');              
+            //$ionicLoading.show({ template: 'Error: ' + error.data + ' ' + error.status + ' ' + error.statusText, noBackdrop: true, duration: 2000 });
+        });        
+    }
+
     getListOrder();
 })
    
@@ -264,7 +276,7 @@ angular.module('app.controllers', [])
             });
             AuthService.register($scope.newUser).then(function(msg){
                 $ionicLoading.hide();
-                $$state.go("tabsController.orderList");  
+                $state.go("tabsController.orderList");  
             },function(errMsg){
                 $ionicLoading.hide();
                 var alertPopup = $ionicPopup.alert({
